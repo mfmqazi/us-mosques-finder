@@ -19,12 +19,12 @@ app.get('/api/masjids', async (req, res) => {
             return res.status(400).json({ error: 'lat and long parameters are required' });
         }
 
-        // Build the MasjidiAPI URL
-        const apiUrl = `https://api.masjidiapp.com/masjids?lat=${lat}&long=${long}&dist=${dist || 50}&limit=${limit || 100}`;
+        // Build the MasjidiAPI v2 URL
+        const apiUrl = `https://api.masjidiapp.com/v2/masjids?lat=${lat}&long=${long}&dist=${dist || 50}&limit=${limit || 100}`;
 
         console.log('Proxying request to:', apiUrl);
 
-        // Make the request to MasjidiAPI
+        // Make the request to MasjidiAPI v2
         const response = await fetch(apiUrl, {
             headers: {
                 'x-api-key': '123-test-key'
@@ -61,6 +61,6 @@ app.get('/health', (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`🚀 Proxy server running on http://localhost:${PORT}`);
-    console.log(`📍 Masjid API endpoint: http://localhost:${PORT}/api/masjids`);
+    console.log(`📍 Masjid API v2 endpoint: http://localhost:${PORT}/api/masjids`);
     console.log(`💚 Health check: http://localhost:${PORT}/health`);
 });
