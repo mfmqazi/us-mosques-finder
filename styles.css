@@ -1,0 +1,619 @@
+/* ===================================
+   Design System & CSS Variables
+   =================================== */
+:root {
+    /* Light Theme Colors (Google Maps inspired) */
+    --color-bg-primary: #ffffff;
+    --color-bg-secondary: #f8f9fa;
+    --color-bg-tertiary: #ffffff;
+    --color-bg-elevated: #ffffff;
+
+    --color-text-primary: #202124;
+    --color-text-secondary: #5f6368;
+    --color-text-muted: #70757a;
+
+    --color-primary: #1a73e8;
+    /* Google Blue */
+    --color-primary-dark: #1557b0;
+    --color-primary-light: #1a73e8;
+
+    --color-accent: #ea4335;
+    /* Google Red for markers */
+    --color-border: #dadce0;
+    --color-border-light: #e8eaed;
+
+    --shadow-sm: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+    --shadow-md: 0 1px 3px rgba(60, 64, 67, 0.3);
+    --shadow-lg: 0 4px 6px rgba(60, 64, 67, 0.3);
+    --shadow-xl: 0 4px 8px 3px rgba(60, 64, 67, 0.15);
+    --shadow-glow: 0 0 20px rgba(26, 115, 232, 0.3);
+
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 16px;
+    /* More rounded like Google Maps */
+    --radius-full: 9999px;
+
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+
+    --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-secondary: 'Amiri', serif;
+
+    --transition-fast: 150ms ease;
+    --transition-base: 250ms ease;
+    --transition-slow: 350ms ease;
+}
+
+/* ===================================
+   Reset & Base Styles
+   =================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-primary);
+    background: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* ===================================
+   Header Styles
+   =================================== */
+.header {
+    background: var(--color-bg-primary);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    z-index: 1000;
+}
+
+.header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #4285f4, #ea4335, #fbbc04, #34a853);
+    /* Google Colors */
+    opacity: 1;
+}
+
+.header-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--spacing-md) var(--spacing-xl);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--spacing-lg);
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.logo-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--color-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: var(--shadow-md);
+}
+
+.logo-text h1 {
+    font-size: 1.375rem;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    margin-bottom: 0;
+}
+
+.subtitle {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    font-weight: 400;
+}
+
+.header-actions {
+    display: flex;
+    gap: var(--spacing-md);
+}
+
+/* ===================================
+   Button Styles
+   =================================== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: 0.5rem 1.25rem;
+    border: none;
+    border-radius: var(--radius-full);
+    font-family: var(--font-primary);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    text-decoration: none;
+}
+
+.btn-secondary {
+    background: white;
+    color: var(--color-primary);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-secondary:hover {
+    background: #f1f3f4;
+    border-color: var(--color-border);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+}
+
+/* ===================================
+   Search Container
+   =================================== */
+.search-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--spacing-lg);
+    position: relative;
+    z-index: 900;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 1px solid transparent;
+    border-radius: 24px;
+    padding: 0 var(--spacing-sm);
+    gap: var(--spacing-sm);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0px rgba(0, 0, 0, 0.02);
+    transition: all var(--transition-base);
+    margin-bottom: var(--spacing-md);
+    height: 48px;
+}
+
+.search-bar:focus-within {
+    box-shadow: 0 4px 6px rgba(32, 33, 36, 0.28);
+    background: white;
+}
+
+.search-icon {
+    margin-left: var(--spacing-sm);
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+}
+
+#search-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--color-text-primary);
+    font-family: var(--font-primary);
+    font-size: 1rem;
+    height: 100%;
+}
+
+.search-submit {
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    padding: 0 1.5rem;
+    height: 36px;
+    border-radius: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-right: 4px;
+    transition: background-color var(--transition-fast);
+}
+
+.search-submit:hover {
+    background: var(--color-primary-dark);
+    box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3);
+}
+
+/* ===================================
+   Filters
+   =================================== */
+.filters {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    background: white;
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    padding: 0.375rem 1rem;
+    border-radius: 16px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.filter-btn:hover {
+    background: #f1f3f4;
+    color: var(--color-text-primary);
+}
+
+.filter-btn.active {
+    background: #e8f0fe;
+    color: var(--color-primary);
+    border-color: transparent;
+}
+
+.count {
+    background: rgba(0, 0, 0, 0.05);
+    padding: 0.125rem 0.375rem;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.filter-btn.active .count {
+    background: rgba(26, 115, 232, 0.1);
+    color: var(--color-primary);
+}
+
+/* ===================================
+   Map Container
+   =================================== */
+.map-container {
+    position: absolute;
+    top: 180px;
+    /* Adjusted for header + search */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    background: #e8eaed;
+    /* Map placeholder color */
+}
+
+/* ===================================
+   Popup Styles
+   =================================== */
+.leaflet-popup-content-wrapper {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    padding: 0;
+    overflow: hidden;
+}
+
+.leaflet-popup-tip {
+    background: white;
+}
+
+.popup-content {
+    padding: var(--spacing-md);
+    min-width: 200px;
+}
+
+.popup-title {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.popup-type {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: var(--spacing-sm);
+}
+
+.popup-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-sm);
+}
+
+.popup-btn {
+    flex: 1;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 4px;
+    font-family: var(--font-primary);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.popup-btn-primary {
+    background: transparent;
+    color: var(--color-primary);
+}
+
+.popup-btn-primary:hover {
+    background: #f1f3f4;
+}
+
+/* ===================================
+   Info Panel
+   =================================== */
+.info-panel {
+    position: fixed;
+    top: 0;
+    left: -400px;
+    /* Slide from left like Google Maps */
+    width: 400px;
+    height: 100vh;
+    background: white;
+    box-shadow: 0 0 16px rgba(0, 0, 0, 0.12);
+    z-index: 2000;
+    transition: left var(--transition-slow);
+    overflow-y: auto;
+}
+
+.info-panel.active {
+    left: 0;
+}
+
+.close-panel {
+    position: absolute;
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    width: 36px;
+    height: 36px;
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: background-color var(--transition-base);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-panel:hover {
+    background: #f1f3f4;
+    color: var(--color-text-primary);
+}
+
+.panel-content {
+    padding: 0;
+}
+
+.panel-header {
+    padding: var(--spacing-xl) var(--spacing-lg) var(--spacing-md);
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.panel-title {
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.panel-subtitle {
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+}
+
+.panel-section {
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.panel-section-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-md);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.prayer-times-grid {
+    display: grid;
+    gap: var(--spacing-sm);
+}
+
+.prayer-time-card {
+    background: white;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: var(--spacing-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.prayer-name {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-text-primary);
+}
+
+.prayer-times {
+    display: flex;
+    gap: var(--spacing-lg);
+    text-align: right;
+}
+
+.prayer-time-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.prayer-time-label {
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+}
+
+.prayer-time-value {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-text-primary);
+}
+
+.iqama-time {
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+.contact-info {
+    display: grid;
+    gap: var(--spacing-sm);
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-sm) 0;
+    color: var(--color-text-primary);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.contact-item:hover {
+    color: var(--color-primary);
+}
+
+.contact-icon {
+    width: 24px;
+    height: 24px;
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ===================================
+   Loading Overlay
+   =================================== */
+.loading-overlay {
+    position: fixed;
+    top: 180px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    padding: 12px 24px;
+    border-radius: 24px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 9999;
+    transition: opacity var(--transition-base), transform var(--transition-base);
+    pointer-events: none;
+}
+
+.loading-overlay.hidden {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+}
+
+.spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--color-border);
+    border-top-color: var(--color-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.loading-spinner p {
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ===================================
+   Responsive Design
+   =================================== */
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        gap: var(--spacing-md);
+        padding: var(--spacing-md);
+    }
+
+    .search-container {
+        padding: var(--spacing-md);
+    }
+
+    .map-container {
+        top: 220px;
+    }
+
+    .info-panel {
+        width: 100%;
+        left: -100%;
+    }
+
+    .info-panel.active {
+        left: 0;
+    }
+}
+
+/* ===================================
+   Marker Cluster Styles
+   =================================== */
+.custom-cluster-icon {
+    background: rgba(66, 133, 244, 0.9);
+    /* Google Blue */
+    border: 2px solid white;
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-family: var(--font-primary);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.custom-cluster-icon.medium {
+    background: rgba(251, 188, 4, 0.9);
+    /* Google Yellow */
+    color: #202124;
+}
+
+.custom-cluster-icon.large {
+    background: rgba(234, 67, 53, 0.9);
+    /* Google Red */
+}

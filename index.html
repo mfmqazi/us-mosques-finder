@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>US Mosques & Islamic Centers - Prayer Times Finder</title>
+    <meta name="description"
+        content="Find mosques and Islamic centers across the United States with prayer times and Iqama information">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- Leaflet Marker Cluster CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Amiri:wght@400;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16 2L18 8L20 2L22 8L24 2L26 8L28 4V28H4V4L6 8L8 2L10 8L12 2L14 8L16 2Z"
+                            fill="currentColor" />
+                        <circle cx="16" cy="20" r="6" fill="currentColor" opacity="0.6" />
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <h1>US Mosques Finder</h1>
+                    <p class="subtitle">Prayer Times & Islamic Centers</p>
+                </div>
+            </div>
+
+            <div class="header-actions">
+                <button id="locate-btn" class="btn btn-secondary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <circle cx="12" cy="12" r="3" />
+                        <line x1="12" y1="2" x2="12" y2="6" />
+                        <line x1="12" y1="18" x2="12" y2="22" />
+                        <line x1="2" y1="12" x2="6" y2="12" />
+                        <line x1="18" y1="12" x2="22" y2="12" />
+                    </svg>
+                    <span>Find Nearby</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Search Bar -->
+    <div class="search-container">
+        <div class="search-bar">
+            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.35-4.35" />
+            </svg>
+            <input type="text" id="search-input" placeholder="Search by city, state, or mosque name..." />
+            <button id="search-btn" class="search-submit">Search</button>
+        </div>
+
+        <div class="filters">
+            <button class="filter-btn active" data-filter="all">
+                <span>All</span>
+                <span class="count" id="count-all">0</span>
+            </button>
+            <button class="filter-btn" data-filter="mosque">
+                <span>Mosques</span>
+                <span class="count" id="count-mosque">0</span>
+            </button>
+            <button class="filter-btn" data-filter="center">
+                <span>Islamic Centers</span>
+                <span class="count" id="count-center">0</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Map Container -->
+    <div id="map" class="map-container"></div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Loading mosques and Islamic centers...</p>
+        </div>
+    </div>
+
+    <!-- Info Panel -->
+    <div id="info-panel" class="info-panel">
+        <button class="close-panel" id="close-panel">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+        </button>
+
+        <div id="panel-content" class="panel-content">
+            <!-- Content will be dynamically loaded -->
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+
+    <!-- Custom JS -->
+    <script src="app.js"></script>
+</body>
+
+</html>
