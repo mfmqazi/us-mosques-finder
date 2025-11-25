@@ -11,9 +11,9 @@ const state = {
 
 // Configuration
 const CONFIG = {
-    // Center of USA
-    defaultCenter: [39.8283, -98.5795],
-    defaultZoom: 4,
+    // Default to New York City for faster initial load
+    defaultCenter: [40.7128, -74.0060], // NYC
+    defaultZoom: 12, // City-level zoom instead of country-level
     minZoomForSearch: 9,
     overpassUrl: 'https://overpass-api.de/api/interpreter',
     fetchTimeout: 15000 // 15 seconds timeout for fetch
