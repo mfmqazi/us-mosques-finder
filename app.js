@@ -245,6 +245,12 @@ async function fetchMosquesInBounds() {
 
 async function fetchFromMasjidiAPI(lat, lng, signal) {
     try {
+        // Skip proxy on GitHub Pages (static hosting)
+        if (window.location.hostname.includes('github.io')) {
+            console.log('Running on GitHub Pages - using OpenStreetMap only');
+            return [];
+        }
+
         const dist = 50; // 50km radius
         const limit = 100; // Maximum allowed by server
 
