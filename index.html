@@ -91,12 +91,10 @@
     <!-- Map Container -->
     <div id="map" class="map-container"></div>
 
-    <!-- Loading Overlay -->
-    <div id="loading-overlay" class="loading-overlay">
-        <div class="loading-spinner">
-            <div class="spinner"></div>
-            <p>Loading mosques and Islamic centers...</p>
-        </div>
+    <!-- Loading Indicator (Spinner in top-right) -->
+    <div id="loading-indicator" class="loading-indicator" style="display: none;">
+        <div class="spinner"></div>
+        <p>Loading...</p>
     </div>
 
     <!-- Info Panel -->
@@ -117,8 +115,8 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
 
-    <!-- Custom JS -->
-    <script src="app.js"></script>
+    <!-- Custom JS with cache-busting version -->
+    <script src="app.js?v=2"></script>
 </body>
 
 </html>
