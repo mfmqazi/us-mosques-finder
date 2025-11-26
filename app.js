@@ -255,9 +255,9 @@ async function fetchFromMasjidiAPI(lat, lng, signal) {
         // Use our live Render proxy
         const endpoint = `https://us-mosques-finder.onrender.com/api/masjids?lat=${lat}&long=${lng}&dist=${dist}&limit=${limit}`;
 
-        // Add a 10s timeout specifically for MasjidiAPI
+        // Add a 30s timeout specifically for MasjidiAPI (Render.com free tier can take time to wake up)
         const timeoutPromise = new Promise((_, reject) =>
-            setTimeout(() => reject(new Error('MasjidiAPI timeout')), 10000)
+            setTimeout(() => reject(new Error('MasjidiAPI timeout')), 30000)
         );
 
         const fetchPromise = fetch(endpoint, { signal: signal });
