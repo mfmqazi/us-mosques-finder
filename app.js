@@ -245,17 +245,11 @@ async function fetchMosquesInBounds() {
 
 async function fetchFromMasjidiAPI(lat, lng, signal) {
     try {
-        // Skip proxy on GitHub Pages (static hosting)
-        if (window.location.hostname.includes('github.io')) {
-            console.log('Running on GitHub Pages - using OpenStreetMap only');
-            return [];
-        }
-
         const dist = 50; // 50km radius
         const limit = 100; // Maximum allowed by server
 
-        // Use our proxy server to avoid CORS issues
-        const endpoint = `http://localhost:3001/api/masjids?lat=${lat}&long=${lng}&dist=${dist}&limit=${limit}`;
+        // Use our live Render proxy
+        const endpoint = `https://us-mosques-finder.onrender.com/api/masjids?lat=${lat}&long=${lng}&dist=${dist}&limit=${limit}`;
 
         const response = await fetch(endpoint, {
             signal: signal
@@ -470,67 +464,56 @@ function closePanel() {
     document.getElementById('info-panel').classList.remove('active');
 }
 
+function formatAddress(tags) {
+    const parts = [];
+    if (tags['addr:street']) parts.push(tags['addr:street']);
+    if (tags['addr:city']) parts.push(tags['addr:city']);
+    if (tags['addr:state']) parts.push(tags['addr:state']);
+    if (tags['addr:postcode']) parts.push(tags['addr:postcode']);
+
+    return parts.length > 0 ? parts.join(', ') : 'Address not available';
+}
+
+function generateMockPrayerTimes() {
+    // In a real app, this would come from the API
+    return {
+        fajr: { adhan: '5:30 AM', iqama: '6:00 AM' },
+        dhuhr: { adhan: '1:15 PM', iqama: '1:30 PM' },
+        asr: { adhan: '4:45 PM', iqama: '5:15 PM' },
+        maghrib: { adhan: '7:30 PM', iqama: '7:35 PM' },
+        isha: { adhan: '9:00 PM', iqama: '9:15 PM' },
+        jumuah: { adhan: '1:00 PM', iqama: '1:30 PM' }
+    };
+}
+
 function showLoading(show) {
-    const overlay = document.getElementById('loading-overlay');
-    if (show) {
-        state.isLoading = true;
-        overlay.classList.remove('hidden');
-    } else {
-        state.isLoading = false;
-        overlay.classList.add('hidden');
+    state.isLoading = show;
+    const loader = document.getElementById('loading-indicator');
+    if (loader) {
+        loader.style.display = show ? 'flex' : 'none';
     }
 }
 
 function showToast(message, type = 'info') {
     // Simple toast implementation
-    let toast = document.getElementById('toast-notification');
-    if (!toast) {
-        toast = document.createElement('div');
-        toast.id = 'toast-notification';
-        toast.style.cssText = `
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #333;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 8px;
-            z-index: 10000;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            font-family: var(--font-primary);
-            font-size: 0.9rem;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        `;
-        document.body.appendChild(toast);
-    }
-
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
     toast.textContent = message;
-    toast.style.background = type === 'error' ? '#ef4444' : (type === 'warning' ? '#f59e0b' : '#10b981');
-    toast.style.opacity = '1';
-
+    toast.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #333;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 24px;
+        z-index: 2000;
+        animation: fadeIn 0.3s ease;
+    `;
+    document.body.appendChild(toast);
     setTimeout(() => {
         toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
     }, 3000);
-}
-
-function formatAddress(tags) {
-    const parts = [];
-    if (tags['addr:street']) parts.push(`${tags['addr:housenumber'] || ''} ${tags['addr:street']}`);
-    if (tags['addr:city']) parts.push(tags['addr:city']);
-    if (tags['addr:state']) parts.push(tags['addr:state']);
-    if (tags['addr:postcode']) parts.push(tags['addr:postcode']);
-    return parts.length > 0 ? parts.join(', ') : 'Address not available';
-}
-
-function generateMockPrayerTimes() {
-    return {
-        fajr: { adhan: '05:30 AM', iqama: '06:00 AM' },
-        dhuhr: { adhan: '01:15 PM', iqama: '01:30 PM' },
-        asr: { adhan: '04:45 PM', iqama: '05:00 PM' },
-        maghrib: { adhan: '07:12 PM', iqama: '07:20 PM' },
-        isha: { adhan: '08:45 PM', iqama: '09:00 PM' },
-        jumuah: { adhan: '01:00 PM', iqama: '01:30 PM' }
-    };
 }
