@@ -215,6 +215,76 @@ async function fetchMosquesInBounds() {
 
     const center = state.map.getCenter();
     const centerLat = center.lat;
+    const centerLng = center.lng;
+
+    showLoading(true);
+
+    try {
+        // Run both fetches in parallel to speed up loading
+        const [masjidiOutcome, osmOutcome] = await Promise.allSettled([
+            fetchFromMasjidiAPI(centerLat, centerLng, signal),
+            fetchFromOpenStreetMap(south, west, north, east, signal)
+        ]);
+
+        const masjidiResults = masjidiOutcome.status === 'fulfilled' ? masjidiOutcome.value : [];
+        const osmResults = osmOutcome.status === 'fulfilled' ? osmOutcome.value : [];
+
+        // Combine and deduplicate results
+        const allResults = [...masjidiResults, ...osmResults];
+        const uniqueResults = deduplicateMosques(allResults);
+
+        updateMarkers(uniqueResults);
+        updateCounts(uniqueResults.length);
+
+    } catch (error) {
+        if (error.name === 'AbortError') {
+            return;
+        }
+        console.error('Error fetching mosques:', error);
+        showToast('Failed to load some mosques. Showing available data.', 'warning');
+    } finally {
+        if (!signal.aborted) {
+            showLoading(false);
+        }
+        state.abortController = null;
+    }
+}
+
+async function fetchFromMasjidiAPI(lat, lng, signal) {
+    try {
+        const dist = 50; // 50km radius
+        const limit = 100; // Maximum allowed by server
+
+        // Use our live Render proxy
+        const endpoint = `https://us-mosques-finder.onrender.com/api/masjids?lat=${lat}&long=${lng}&dist=${dist}&limit=${limit}`;
+
+        // Add a 10s timeout specifically for MasjidiAPI
+        const timeoutPromise = new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('MasjidiAPI timeout')), 10000)
+        );
+
+        const fetchPromise = fetch(endpoint, { signal: signal });
+
+        const response = await Promise.race([fetchPromise, timeoutPromise]);
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log('MasjidiAPI response via proxy:', data);
+
+            // Transform MasjidiAPI data to our format
+            return transformMasjidiData(data);
+        } else {
+            console.warn('Proxy returned status:', response.status);
+            return [];
+        }
+    } catch (error) {
+        if (error.name === 'AbortError') return [];
+        console.warn('MasjidiAPI proxy unavailable/timeout, using OSM only:', error);
+        return [];
+    }
+}
+
+async function fetchFromOpenStreetMap(south, west, north, east, signal) {
     const query = `
         [out:json][timeout:60];
         (
