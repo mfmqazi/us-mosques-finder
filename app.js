@@ -11,9 +11,9 @@ const state = {
 
 // Configuration
 const CONFIG = {
-    // Default to New York City for faster initial load
-    defaultCenter: [40.7128, -74.0060], // NYC
-    defaultZoom: 12, // City-level zoom instead of country-level
+    // Default to Phoenix, AZ if geolocation fails
+    defaultCenter: [33.4484, -112.0740], // Phoenix, AZ
+    defaultZoom: 12, // City-level zoom
     minZoomForSearch: 9,
     overpassUrl: 'https://overpass-api.de/api/interpreter',
     fetchTimeout: 15000 // 15 seconds timeout for fetch
@@ -41,6 +41,8 @@ const mosqueIcon = L.divIcon({
 document.addEventListener('DOMContentLoaded', () => {
     initMap();
     setupEventListeners();
+    // Auto-detect location on startup
+    autoDetectLocation();
 });
 
 function initMap() {
@@ -121,7 +123,10 @@ function setupEventListeners() {
 
     searchBtn.addEventListener('click', () => handleSearch(searchInput.value));
     searchInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') handleSearch(searchInput.value);
+        if (e.key === 'Enter') {
+            e.preventDefault(); // Prevent form submission
+            handleSearch(searchInput.value);
+        }
     });
 
     document.getElementById('locate-btn').addEventListener('click', handleLocateMe);
@@ -194,6 +199,40 @@ function handleLocateMe() {
     } else {
         showLoading(false);
         showToast("Geolocation is not supported by your browser.", 'error');
+    }
+}
+
+function autoDetectLocation() {
+    if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const { latitude, longitude } = position.coords;
+                state.currentLocation = [latitude, longitude];
+                state.map.setView([latitude, longitude], 13);
+
+                // Add user location marker
+                L.circleMarker([latitude, longitude], {
+                    radius: 8,
+                    fillColor: "#4285F4",
+                    color: "#fff",
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 1
+                }).addTo(state.map).bindPopup("You are here");
+            },
+            (error) => {
+                // Silently fall back to Phoenix, AZ (already set as default)
+                console.log('Geolocation not available, using Phoenix, AZ as default');
+            },
+            {
+                enableHighAccuracy: false, // Faster, less accurate is fine for initial load
+                timeout: 5000,
+                maximumAge: 0
+            }
+        );
+    } else {
+        // Geolocation not supported, use Phoenix, AZ (already set as default)
+        console.log('Geolocation not supported, using Phoenix, AZ as default');
     }
 }
 
