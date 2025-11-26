@@ -1,6 +1,14 @@
 const express = require('express');
 const cors = require('cors');
 const fetch = require('node-fetch');
+const https = require('https');
+
+// Create custom HTTPS agent with relaxed SSL settings
+const httpsAgent = new https.Agent({
+    rejectUnauthorized: false, // Allow self-signed certificates
+    minVersion: 'TLSv1', // Allow older TLS versions
+    maxVersion: 'TLSv1.3' // Up to latest
+});
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -19,13 +27,14 @@ app.get('/api/masjids', async (req, res) => {
             return res.status(400).json({ error: 'lat and long parameters are required' });
         }
 
-        // Build the MasjidiAPI v2 URL
-        const apiUrl = `https://api.masjidiapp.com/v2/masjids?lat=${lat}&long=${long}&dist=${dist || 50}&limit=${limit || 100}`;
+        // Build the MasjidiAPI v2 URL (using HTTP as HTTPS has SSL issues)
+        const apiUrl = `http://api.masjidiapp.com/v2/masjids?lat=${lat}&long=${long}&dist=${dist || 50}&limit=${limit || 100}`;
 
         console.log('Proxying request to:', apiUrl);
 
-        // Make the request to MasjidiAPI v2
+        // Make the request to MasjidiAPI v2 with custom HTTPS agent
         const response = await fetch(apiUrl, {
+            agent: httpsAgent,
             headers: {
                 'x-api-key': '123-test-key'
             }
