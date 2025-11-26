@@ -140,7 +140,6 @@ function setupEventListeners() {
 async function handleSearch(query) {
     if (!query) return;
 
-    showLoading(true);
     try {
         const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=us`);
         const data = await response.json();
@@ -151,15 +150,13 @@ async function handleSearch(query) {
             const lon = parseFloat(result.lon);
 
             state.map.setView([lat, lon], 13);
-            // Trigger fetch after move
+            // Map movement will trigger fetchMosquesInBounds which handles loading
         } else {
             showToast('Location not found.', 'warning');
         }
     } catch (error) {
         console.error('Search error:', error);
         showToast('An error occurred while searching.', 'error');
-    } finally {
-        showLoading(false);
     }
 }
 
@@ -238,14 +235,14 @@ async function fetchMosquesInBounds() {
 
     } catch (error) {
         if (error.name === 'AbortError') {
-            return;
+            // Don't show error for aborted requests
+        } else {
+            console.error('Error fetching mosques:', error);
+            showToast('Failed to load some mosques. Showing available data.', 'warning');
         }
-        console.error('Error fetching mosques:', error);
-        showToast('Failed to load some mosques. Showing available data.', 'warning');
     } finally {
-        if (!signal.aborted) {
-            showLoading(false);
-        }
+        // Always hide loading spinner, even if request was aborted
+        showLoading(false);
         state.abortController = null;
     }
 }
